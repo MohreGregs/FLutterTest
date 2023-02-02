@@ -9,11 +9,15 @@ class SliderWithText extends StatefulWidget{
     required this.text,
     required this.onSliderChanged,
     required this.currentState,
+    required this.rangeStart,
+    required this.rangeEnd,
   });
 
   final String text;
   final ValueChanged<double> onSliderChanged;
   final double currentState;
+  final int rangeStart;
+  final int rangeEnd;
 }
 
 class SliderWithTextState extends State<SliderWithText>{
@@ -37,20 +41,33 @@ class SliderWithTextState extends State<SliderWithText>{
         Text(
           widget.text,
         ),
-        Slider(
-          value: currentState,
-          max: 100,
-          divisions: 100,
-          label: currentState.round().toString(),
-          onChanged: (double value) {
-            setState((){
-              currentState = value;
-            });
-          },
-          onChangeEnd: (value){
-            widget.onSliderChanged(currentState);
-          },
-        ),
+        Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child:Row(
+              children: [
+
+                Text(widget.rangeStart.toString()),
+                Expanded(
+                  child: Slider(
+                    value: currentState,
+                    min: widget.rangeStart.toDouble(),
+                    max: widget.rangeEnd.toDouble(),
+                    divisions: (widget.rangeEnd - widget.rangeStart).toInt(),
+                    label: currentState.round().toString(),
+                    onChanged: (double value) {
+                      setState((){
+                        currentState = value;
+                      });
+                    },
+                    onChangeEnd: (value){
+                      widget.onSliderChanged(currentState);
+                    },
+                  ),
+                ),
+                Text(widget.rangeEnd.toString())
+              ],
+            )
+        )
       ],
     );
   }

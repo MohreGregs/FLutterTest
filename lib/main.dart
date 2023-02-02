@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertest/database/database.dart';
+import 'package:fluttertest/widgets/adminWidget.dart';
 import 'package:fluttertest/widgets/diagramWidget.dart';
 import 'package:fluttertest/widgets/insertDataWidget.dart';
 
-void main() {
+import 'database/entities/user.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await AppDatabase.openAppDatabase();
   runApp(const MyApp());
 }
 
@@ -15,12 +21,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.orange,
       ),
       initialRoute: '/',
       routes: {
         '/': (context) => const InsertDataPage(),
         '/data': (context) => const DiagramPage(),
+        '/admin': (context) => const AdminWidget(),
       },
     );
   }
