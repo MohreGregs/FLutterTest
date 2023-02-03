@@ -64,6 +64,15 @@ class AppDatabase{
     );
   }
 
+  static Future<void> updateAttribute(Attribute attribute) async{
+     await database?.update(
+         "attributes",
+         attribute.toMap(),
+         where: 'id = ?',
+         whereArgs: [attribute.id]
+     );
+  }
+
    static Future<void> getUsers() async{
      final List<Map<String, Object?>>? maps = await database?.query('users');
      if(maps == null){
@@ -118,5 +127,13 @@ class AppDatabase{
         maps[index]['name'] as String,
       );
     });
+  }
+
+  static Future<void> deleteEntry(int id, String table) async {
+     await database?.delete(
+       table,
+       where: 'id = ?',
+       whereArgs: [id]
+     );
   }
 }

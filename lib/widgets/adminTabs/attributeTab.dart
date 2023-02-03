@@ -13,8 +13,15 @@ class AttributeTab extends StatefulWidget{
 }
 
 class AttributeTabState extends State<AttributeTab>{
+  List<Attribute>? attributes;
+
   @override
   Widget build(BuildContext context) {
+    AppDatabase.getAttributes().whenComplete(() => {
+      setState((){
+        attributes = AppDatabase.attributes;
+      })
+    });
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -31,18 +38,45 @@ class AttributeTabState extends State<AttributeTab>{
                 icon: const Icon(Icons.add),
               ),
             ],
+          ),
+          Expanded(
+            child: (attributes != null && attributes!.isNotEmpty) ?
+            ListView.separated(
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    height: 50,
+                    color: Colors.white,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Entry ${attributes![index].name}'),
+                          IconButton(
+                              color:Colors.orange,
+                              onPressed: (){
+                                displayAddAttributeDialog(context, attributes?[index]);
+                              },
+                              icon: const Icon(Icons.edit)
+                          )
+                        ]
+                    ),
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) => const Divider(),
+                itemCount: attributes!.length
+            )
+                : const Center (child: Text("No attributes"),),
           )
         ],
       ),
     );
   }
 
-  Future<void> displayAddAttributeDialog(BuildContext context) async{
-    var valueName = "";
-    var valueThreshold = "";
-    var valueRangeStart = "";
-    var valueRangeEnd = "";
-    var errorText = "";
+  Future<void> displayAddAttributeDialog(BuildContext context, [Attribute? attribute]) async{
+    String valueName = attribute?.name ?? "";
+    String valueThreshold = attribute?.threshold.toString() ?? "";
+    String valueRangeStart = attribute?.rangeStart.toString() ?? "";
+    String valueRangeEnd = attribute?.rangeEnd.toString() ?? "";
+    String errorText = "";
 
     return showDialog(
         context: context,
@@ -97,7 +131,11 @@ class AttributeTabState extends State<AttributeTab>{
                       if(int.parse(valueRangeStart) >= int.parse(valueRangeEnd)){
                         errorText = "range start should be smaller than range end";
                       }else{
-                        AppDatabase.insertAttribute(Attribute(-1, valueName, int.parse(valueThreshold), int.parse(valueRangeStart), int.parse(valueRangeEnd)));
+                        if(attribute == null){
+                          AppDatabase.insertAttribute(Attribute(-1, valueName, int.parse(valueThreshold), int.parse(valueRangeStart), int.parse(valueRangeEnd)));
+                        }else{
+                          AppDatabase.updateAttribute(Attribute(attribute.id, valueName, int.parse(valueThreshold), int.parse(valueRangeStart), int.parse(valueRangeEnd)));
+                        }
                         Navigator.pop(context);
                       }
                     });
