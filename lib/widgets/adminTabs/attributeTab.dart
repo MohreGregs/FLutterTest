@@ -39,7 +39,9 @@ class AttributeTabState extends State<AttributeTab>{
               IconButton(
                 color:Colors.orange,
                 onPressed: (){
-                  displayAddAttributeDialog(context);
+                  displayAddAttributeDialog(context).then((value) => {
+                    initState()
+                  });
                 },
                 icon: const Icon(Icons.add),
               ),

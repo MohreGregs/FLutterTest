@@ -9,4 +9,9 @@ class Team{
       'name': name,
     };
   }
+
+  @override
+  String toString() {
+    return name;
+  }
 }

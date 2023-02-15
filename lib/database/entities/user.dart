@@ -9,4 +9,9 @@ class User{
       'name': name,
     };
   }
+
+  @override
+  String toString() {
+    return name;
+  }
 }

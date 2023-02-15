@@ -43,7 +43,9 @@ class TeamTabState extends State<TeamTab>{
                 IconButton(
                   color:Colors.orange,
                   onPressed: (){
-                    displayAddTeamDialog(context);
+                    displayAddTeamDialog(context).then((value) => {
+                      initState()
+                    });
                   },
                   icon: const Icon(Icons.add),
                 ),
@@ -70,7 +72,9 @@ class TeamTabState extends State<TeamTab>{
                                   IconButton(
                                       color:Colors.orange,
                                       onPressed: (){
-                                        displayAddTeamDialog(context, teams?[index]);
+                                        displayAddTeamDialog(context, teams?[index]).then((value) => {
+                                          initState()
+                                        });
                                       },
                                       icon: const Icon(Icons.edit)
                                   )

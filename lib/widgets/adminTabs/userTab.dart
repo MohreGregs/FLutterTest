@@ -38,7 +38,9 @@ class UserTabState extends State<UserTab> {
               IconButton(
                 color: Colors.orange,
                 onPressed: () {
-                  displayAddUserDialog(context);
+                  displayAddUserDialog(context).then((value) => {
+                    initState()
+                  });
                 },
                 icon: const Icon(Icons.add),
               ),

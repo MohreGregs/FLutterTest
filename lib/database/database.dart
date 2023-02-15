@@ -3,6 +3,7 @@ import 'package:fluttertest/database/entities/teamUser.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
+import 'entities/point.dart';
 import 'entities/team.dart';
 import 'entities/user.dart';
 
@@ -14,6 +15,7 @@ class AppDatabase {
   static List<Team>? teams;
   static List<User>? teamUsers;
   static List<TeamUser>? teamUserValidity;
+  static List<Point>? pointsOfTeam;
 
   static const String userSQL =
       'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT);';
@@ -23,6 +25,8 @@ class AppDatabase {
       'CREATE TABLE teams(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT);';
   static const String teamUserSQL =
       'CREATE TABLE teamUser(id INTEGER PRIMARY KEY AUTOINCREMENT, teamId INTEGER REFERENCES teams(id), userId INTEGER REFERENCES users(id));';
+  static const String pointSQL =
+      'CREATE TABLE points(id INTEGER PRIMARY KEY AUTOINCREMENT, value DOUBLE, creationTime DATE, attributeId INTEGER REFERENCES attributes(id), teamId INTEGER REFERENCES teams(id), userID INTEGER REFERENCES users(id));';
 
   static openAppDatabase() async {
     database = await openDatabase(
@@ -32,6 +36,7 @@ class AppDatabase {
         await db.execute(attributeSQL);
         await db.execute(teamSQL);
         await db.execute(teamUserSQL);
+        await db.execute(pointSQL);
       },
       version: 2,
     );
@@ -66,6 +71,14 @@ class AppDatabase {
       'teamUser',
       teamUser.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  static Future<void> insertPoint(Point point) async{
+    await database?.insert(
+      'points',
+      point.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace
     );
   }
 
@@ -149,6 +162,22 @@ class AppDatabase {
     teamUserValidity = List.generate(maps.length, (index) {
       return TeamUser(maps[index]['id'] as int, maps[index]['userId'] as int,
           maps[index]['teamId'] as int);
+    });
+  }
+
+  static Future<void> getPointsOfTeam(int teamId) async{
+    final List<Map<String, Object?>>? maps = await database?. query('points', where: 'teamId = ?', whereArgs: [teamId]);
+    if(maps == null) return;
+
+    pointsOfTeam = List.generate(maps.length, (index) {
+      return Point(
+        maps[index]['id'] as int,
+        maps[index]['value'] as double,
+        maps[index]['creationTime'] as DateTime,
+        maps[index]['attributeId'] as int,
+        maps[index]['teamId'] as int,
+        maps[index]['userId'] as int
+    );
     });
   }
 
