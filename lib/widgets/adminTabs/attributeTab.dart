@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertest/database/entities/attribute.dart';
+import 'package:fluttertest/widgets/dialogs/addAttributeDialog.dart';
 
 import '../../database/database.dart';
 
@@ -16,12 +17,17 @@ class AttributeTabState extends State<AttributeTab>{
   List<Attribute>? attributes;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     AppDatabase.getAttributes().whenComplete(() => {
       setState((){
         attributes = AppDatabase.attributes;
       })
     });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -72,77 +78,10 @@ class AttributeTabState extends State<AttributeTab>{
   }
 
   Future<void> displayAddAttributeDialog(BuildContext context, [Attribute? attribute]) async{
-    String valueName = attribute?.name ?? "";
-    String valueThreshold = attribute?.threshold.toString() ?? "";
-    String valueRangeStart = attribute?.rangeStart.toString() ?? "";
-    String valueRangeEnd = attribute?.rangeEnd.toString() ?? "";
-    String errorText = "";
-
     return showDialog(
         context: context,
         builder: (context){
-          return AlertDialog(
-              title: const Text("Add new Attribute"),
-              content: Column(
-                children: [
-                  Text(errorText),
-                  TextField(
-                    onChanged: (value){
-                      valueName = value;
-                    },
-                    decoration: const InputDecoration(hintText: "Name"),
-                  ),
-                  TextField(
-                    onChanged: (value){
-                      valueThreshold = value;
-                    },
-                    decoration: const InputDecoration(hintText: "Threshold"),
-                    keyboardType: const TextInputType.numberWithOptions(decimal: false),
-                  ),
-                  TextField(
-                    onChanged: (value){
-                      valueRangeStart = value;
-                    },
-                    decoration: const InputDecoration(hintText: "Range Start"),
-                    keyboardType: const TextInputType.numberWithOptions(decimal: false),
-                  ),
-                  TextField(
-                    onChanged: (value){
-                      valueRangeEnd = value;
-                    },
-                    decoration: const InputDecoration(hintText: "Range End"),
-                    keyboardType: const TextInputType.numberWithOptions(decimal: false),
-                  ),
-                ],
-              ),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: (){
-                    setState(() {
-                      Navigator.pop(context);
-                    });
-                  },
-                  child: const Text("Cancel"),
-                ),
-                TextButton(
-                  child: const Text("OK"),
-                  onPressed: (){
-                    setState(() {
-                      if(int.parse(valueRangeStart) >= int.parse(valueRangeEnd)){
-                        errorText = "range start should be smaller than range end";
-                      }else{
-                        if(attribute == null){
-                          AppDatabase.insertAttribute(Attribute(-1, valueName, int.parse(valueThreshold), int.parse(valueRangeStart), int.parse(valueRangeEnd)));
-                        }else{
-                          AppDatabase.updateAttribute(Attribute(attribute.id, valueName, int.parse(valueThreshold), int.parse(valueRangeStart), int.parse(valueRangeEnd)));
-                        }
-                        Navigator.pop(context);
-                      }
-                    });
-                  },
-                )
-              ]
-          );
+          return AddAttributeDialog(attribute: attribute,);
         }
     );
   }

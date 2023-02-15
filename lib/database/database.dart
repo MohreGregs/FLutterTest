@@ -6,41 +6,46 @@ import 'package:sqflite/sqflite.dart';
 import 'entities/team.dart';
 import 'entities/user.dart';
 
-class AppDatabase{
+class AppDatabase {
   static Database? database;
 
   static List<User>? users;
   static List<Attribute>? attributes;
   static List<Team>? teams;
   static List<User>? teamUsers;
+  static List<TeamUser>? teamUserValidity;
 
-  static const String userSQL = 'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT);';
-  static const String attributeSQL = 'CREATE TABLE attributes(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, threshold INTEGER, rangeStart INTEGER, rangeEnd INTEGER);';
-  static const String teamSQL = 'CREATE TABLE teams(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT);';
-  static const String teamUserSQL = 'CREATE TABLE teamUser(id INTEGER PRIMARY KEY AUTOINCREMENT, teamId INTEGER REFERENCES teams(id), userId INTEGER REFERENCES users(id));';
+  static const String userSQL =
+      'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT);';
+  static const String attributeSQL =
+      'CREATE TABLE attributes(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, threshold INTEGER, rangeStart INTEGER, rangeEnd INTEGER);';
+  static const String teamSQL =
+      'CREATE TABLE teams(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT);';
+  static const String teamUserSQL =
+      'CREATE TABLE teamUser(id INTEGER PRIMARY KEY AUTOINCREMENT, teamId INTEGER REFERENCES teams(id), userId INTEGER REFERENCES users(id));';
 
-   static openAppDatabase() async {
-     database = await openDatabase(
-       join(await getDatabasesPath(), 'database.db'),
-       onCreate: (db, version) async{
-         await db.execute(userSQL);
-         await db.execute(attributeSQL);
-         await db.execute(teamSQL);
-         await db.execute(teamUserSQL);
-         },
-         version: 2,
-     );
-   }
+  static openAppDatabase() async {
+    database = await openDatabase(
+      join(await getDatabasesPath(), 'database.db'),
+      onCreate: (db, version) async {
+        await db.execute(userSQL);
+        await db.execute(attributeSQL);
+        await db.execute(teamSQL);
+        await db.execute(teamUserSQL);
+      },
+      version: 2,
+    );
+  }
 
-   static Future<void> insertUser(User user) async{
-     await database?.insert(
-         'users',
-          user.toMap(),
-          conflictAlgorithm: ConflictAlgorithm.replace,
-     );
-   }
+  static Future<void> insertUser(User user) async {
+    await database?.insert(
+      'users',
+      user.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
 
-  static Future<void> insertTeam(Team team) async{
+  static Future<void> insertTeam(Team team) async {
     await database?.insert(
       'teams',
       team.toMap(),
@@ -48,7 +53,7 @@ class AppDatabase{
     );
   }
 
-  static Future<void> insertAttribute(Attribute attribute) async{
+  static Future<void> insertAttribute(Attribute attribute) async {
     await database?.insert(
       'attributes',
       attribute.toMap(),
@@ -56,7 +61,7 @@ class AppDatabase{
     );
   }
 
-  static Future<void> insertTeamUser(TeamUser teamUser) async{
+  static Future<void> insertTeamUser(TeamUser teamUser) async {
     await database?.insert(
       'teamUser',
       teamUser.toMap(),
@@ -64,32 +69,38 @@ class AppDatabase{
     );
   }
 
-  static Future<void> updateAttribute(Attribute attribute) async{
-     await database?.update(
-         "attributes",
-         attribute.toMap(),
-         where: 'id = ?',
-         whereArgs: [attribute.id]
-     );
+  static Future<void> updateUser(User user) async {
+    await database
+        ?.update("users", user.toMap(), where: 'id = ?', whereArgs: [user.id]);
   }
 
-   static Future<void> getUsers() async{
-     final List<Map<String, Object?>>? maps = await database?.query('users');
-     if(maps == null){
-       return;
-     }
-     users = List.generate(maps.length, (index) {
-       return User(
-         maps[index]['id'] as int,
-         maps[index]['name'] as String,
-       );
-     });
-   }
+  static Future<void> updateTeam(Team team) async {
+    await database
+        ?.update("teams", team.toMap(), where: 'id = ?', whereArgs: [team.id]);
+  }
 
-  static Future<void> getAttributes() async{
+  static Future<void> updateAttribute(Attribute attribute) async {
+    await database?.update("attributes", attribute.toMap(),
+        where: 'id = ?', whereArgs: [attribute.id]);
+  }
 
-    final List<Map<String, Object?>>? maps = await database?.query('attributes');
-    if(maps == null){
+  static Future<void> getUsers() async {
+    final List<Map<String, Object?>>? maps = await database?.query('users');
+    if (maps == null) {
+      return;
+    }
+    users = List.generate(maps.length, (index) {
+      return User(
+        maps[index]['id'] as int,
+        maps[index]['name'] as String,
+      );
+    });
+  }
+
+  static Future<void> getAttributes() async {
+    final List<Map<String, Object?>>? maps =
+        await database?.query('attributes');
+    if (maps == null) {
       return;
     }
     attributes = List.generate(maps.length, (index) {
@@ -103,9 +114,9 @@ class AppDatabase{
     });
   }
 
-  static Future<void> getTeams() async{
+  static Future<void> getTeams() async {
     final List<Map<String, Object?>>? maps = await database?.query('teams');
-    if(maps == null){
+    if (maps == null) {
       return;
     }
     teams = List.generate(maps.length, (index) {
@@ -116,9 +127,10 @@ class AppDatabase{
     });
   }
 
-  static Future<void> getTeamUsers(int teamId) async{
-    final List<Map<String, Object?>>? maps = await database?.rawQuery('SELECT users.* FROM teamUser JOIN users ON teamUser.userId == users.id WHERE teamUser.teamId == $teamId;');
-    if(maps == null){
+  static Future<void> getTeamUsers(int teamId) async {
+    final List<Map<String, Object?>>? maps = await database?.rawQuery(
+        'SELECT users.* FROM teamUser JOIN users ON teamUser.userId == users.id WHERE teamUser.teamId == $teamId;');
+    if (maps == null) {
       return;
     }
     teamUsers = List.generate(maps.length, (index) {
@@ -129,11 +141,19 @@ class AppDatabase{
     });
   }
 
-  static Future<void> deleteEntry(int id, String table) async {
-     await database?.delete(
-       table,
-       where: 'id = ?',
-       whereArgs: [id]
-     );
+  static Future<void> getTeamUserValidityOfTeam(int teamId) async {
+    final List<Map<String, Object?>>? maps = await database
+        ?.query('teamUser', where: "teamId = ?", whereArgs: [teamId]);
+    if (maps == null) return;
+
+    teamUserValidity = List.generate(maps.length, (index) {
+      return TeamUser(maps[index]['id'] as int, maps[index]['userId'] as int,
+          maps[index]['teamId'] as int);
+    });
+  }
+
+  static Future<void> deleteEntry(int? id, String table) async {
+    if(id == null) return;
+    await database?.delete(table, where: 'id = ?', whereArgs: [id]);
   }
 }

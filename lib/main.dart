@@ -4,8 +4,6 @@ import 'package:fluttertest/widgets/adminWidget.dart';
 import 'package:fluttertest/widgets/diagramWidget.dart';
 import 'package:fluttertest/widgets/insertDataWidget.dart';
 
-import 'database/entities/user.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppDatabase.openAppDatabase();

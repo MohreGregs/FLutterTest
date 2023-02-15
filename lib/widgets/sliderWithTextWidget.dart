@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class SliderWithText extends StatefulWidget{
+class SliderWithText extends StatefulWidget {
   @override
   SliderWithTextState createState() => SliderWithTextState();
 
@@ -20,8 +20,7 @@ class SliderWithText extends StatefulWidget{
   final int rangeEnd;
 }
 
-class SliderWithTextState extends State<SliderWithText>{
-
+class SliderWithTextState extends State<SliderWithText> {
   double currentState = 0;
 
   double _getSliderValue() {
@@ -43,9 +42,8 @@ class SliderWithTextState extends State<SliderWithText>{
         ),
         Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child:Row(
+            child: Row(
               children: [
-
                 Text(widget.rangeStart.toString()),
                 Expanded(
                   child: Slider(
@@ -55,19 +53,18 @@ class SliderWithTextState extends State<SliderWithText>{
                     divisions: (widget.rangeEnd - widget.rangeStart).toInt(),
                     label: currentState.round().toString(),
                     onChanged: (double value) {
-                      setState((){
+                      setState(() {
                         currentState = value;
                       });
                     },
-                    onChangeEnd: (value){
+                    onChangeEnd: (value) {
                       widget.onSliderChanged(currentState);
                     },
                   ),
                 ),
                 Text(widget.rangeEnd.toString())
               ],
-            )
-        )
+            ))
       ],
     );
   }
