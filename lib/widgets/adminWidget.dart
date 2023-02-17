@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertest/widgets/adminTabs/attributeTab.dart';
 import 'package:fluttertest/widgets/adminTabs/teamTab.dart';
 import 'package:fluttertest/widgets/adminTabs/userTab.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AdminWidget extends StatefulWidget {
   const AdminWidget({super.key});
@@ -14,23 +15,24 @@ class AdminWidget extends StatefulWidget {
 class AdminState extends State<AdminWidget> {
   @override
   Widget build(BuildContext context) {
+    var locale = AppLocalizations.of(context);
     return DefaultTabController(
       length: 3,
       child: Scaffold(
           appBar: AppBar(
-            title: const Text("Admin"),
-            bottom: const TabBar(tabs: [
+            title: Text(locale!.admin),
+            bottom: TabBar(tabs: [
               Tab(
                 icon: Icon(Icons.person),
-                text: "Users",
+                text: locale.users,
               ),
               Tab(
                 icon: Icon(Icons.people),
-                text: "Teams",
+                text: locale.teams,
               ),
               Tab(
                 icon: Icon(Icons.bubble_chart),
-                text: "Attributes",
+                text: locale.attributes,
               ),
             ]),
           ),

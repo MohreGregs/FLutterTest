@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertest/classes/custom_icons_icons.dart';
 import 'package:fluttertest/widgets/dialogs/addUsersToTeamDialog.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../database/database.dart';
 import '../../database/entities/team.dart';
@@ -26,6 +27,7 @@ class TeamTabState extends State<TeamTab>{
 
   @override
   Widget build(BuildContext context) {
+      var locale = AppLocalizations.of(context);
       return Padding(
         padding: const EdgeInsets.all(10),
         child: Column(
@@ -33,7 +35,7 @@ class TeamTabState extends State<TeamTab>{
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text("Teams", style: TextStyle(fontSize: 20)),
+                Text(locale!.teams, style: TextStyle(fontSize: 20)),
                 IconButton(
                   color:Colors.orange,
                   onPressed: (){
@@ -55,7 +57,7 @@ class TeamTabState extends State<TeamTab>{
                             child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text('Entry ${teams![index].name}'),
+                                  Text(teams![index].name),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
@@ -84,7 +86,7 @@ class TeamTabState extends State<TeamTab>{
                         separatorBuilder: (BuildContext context, int index) => const Divider(),
                         itemCount: teams!.length
                     )
-                    : const Center(child: Text("No teams"))
+                    : Center(child: Text(locale.noTeams))
             )
           ],
         ),

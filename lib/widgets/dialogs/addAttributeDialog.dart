@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertest/database/entities/attribute.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../database/database.dart';
 
@@ -32,28 +33,29 @@ class AddAttributeState extends State<AddAttributeDialog>{
 
   @override
   Widget build(BuildContext context) {
+    var locale = AppLocalizations.of(context);
     return AlertDialog(
-        title: const Text("Add new Attribute"),
+        title: Text(locale!.newAttribute),
         content: Column(
           children: [
             Text(errorText, style: const TextStyle(color: Colors.redAccent),),
             TextField(
               controller: nameController,
-              decoration: const InputDecoration(hintText: "Name"),
+              decoration: InputDecoration(hintText: locale.name),
             ),
             TextField(
               controller: thresholdController,
-              decoration: const InputDecoration(hintText: "Threshold"),
+              decoration: InputDecoration(hintText: locale.threshold),
               keyboardType: const TextInputType.numberWithOptions(decimal: false),
             ),
             TextField(
               controller: rangeStartController,
-              decoration: const InputDecoration(hintText: "Range Start"),
+              decoration: InputDecoration(hintText: locale.rangeStart),
               keyboardType: const TextInputType.numberWithOptions(decimal: false),
             ),
             TextField(
               controller: rangeEndController,
-              decoration: const InputDecoration(hintText: "Range End"),
+              decoration: InputDecoration(hintText: locale.rangeEnd),
               keyboardType: const TextInputType.numberWithOptions(decimal: false),
             ),
           ],
@@ -65,19 +67,19 @@ class AddAttributeState extends State<AddAttributeDialog>{
                 Navigator.pop(context);
               });
             },
-            child: const Text("Cancel"),
+            child: Text(locale.cancel),
           ),
           TextButton(
-            child: const Text("OK"),
+            child: Text(locale.ok),
             onPressed: (){
               setState(() {
                 if(int.parse(rangeStartController.text) >= int.parse(rangeEndController.text)){
                   setState(() {
-                    errorText = "range start should be smaller than range end";
+                    errorText = locale.rangeError;
                   });
                 }else if(nameController.text == ""){
                   setState(() {
-                    errorText = "please insert name";
+                    errorText = locale.nameError;
                   });
                 }else{
                   if(thresholdController.text == ""){

@@ -1,0 +1,39 @@
+{
+  "appTitle": "TeamRadar",
+  "insertPoints": "Punkt anlegen",
+  "chooseTeam": "Team auswählen",
+  "chooseUser": "Nutzer auswählen",
+  "noUsersForTeam": "Keine Nutzer für dieses Team",
+  "sendPoint": "Punkte senden",
+  "chooseUserAndTeam": "Bitte wähle Team und Nutzer",
+  "firstInsertData": "Bitte füge Teams, Nutzer und Eigenschaften hinzu",
+  "noAttributes": "Keine Eigenschaften",
+
+  "data": "Daten",
+  "noData": "Keine Daten vorhanden",
+  "selectTeam": "Bitte Team wählen",
+
+  "admin": "Admin",
+  "users": "Nutzer",
+  "teams": "Teams",
+  "attributes": "Eigenschaften",
+
+  "noTeams": "Keine Teams",
+  "noUsers": "Keine Nutzer",
+
+  "name": "Name",
+  "cancel": "Abbrechen",
+  "ok": "OK",
+  "nameError": "Fehler: Name erforderlich",
+
+  "newAttribute": "Neue Eigenschaft hinzufügen",
+  "threshold": "Schwellenwert",
+  "rangeStart": "Minimalwert",
+  "rangeEnd": "Maximalwert",
+  "rangeError": "Fehler: Maximalwert sollte größer als Minimalwert sein",
+
+  "newTeam": "Neunes Team hinzufügen",
+  "newUser": "Neuen Nutzer hinzufügen",
+
+  "chooseUsers": "Nutzer des Teams {team} wählen"
+}

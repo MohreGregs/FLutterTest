@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../database/database.dart';
 import '../../database/entities/user.dart';
@@ -25,14 +26,15 @@ class AddUserState extends State<AddUserDialog> {
 
   @override
   Widget build(BuildContext context) {
+    var locale = AppLocalizations.of(context);
     return AlertDialog(
-      title: const Text("Add new User"),
+      title: Text(locale!.newUser),
       content: Column(
         children: [
           Text(errorText, style: const TextStyle(color: Colors.redAccent),),
           TextField(
             controller: nameController,
-            decoration: const InputDecoration(hintText: "Name"),
+            decoration: InputDecoration(hintText: locale.name),
           ),
         ],
       ),
@@ -43,15 +45,15 @@ class AddUserState extends State<AddUserDialog> {
               Navigator.pop(context);
             });
           },
-          child: const Text("Cancel"),
+          child: Text(locale.cancel),
         ),
         TextButton(
-          child: const Text("OK"),
+          child: Text(locale.ok),
           onPressed: () {
             setState(() {
               if (nameController.text == "") {
                 setState(() {
-                  errorText = "Name required";
+                  errorText = locale.nameError;
                 });
               } else {
                 if (widget.user != null) {

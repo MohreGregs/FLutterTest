@@ -1,0 +1,39 @@
+{
+  "appTitle": "TeamRadar",
+  "insertPoints": "Insert points",
+  "chooseTeam": "Choose team",
+  "chooseUser": "Choose user",
+  "noUsersForTeam": "No users for this team",
+  "sendPoint": "Send points",
+  "chooseUserAndTeam": "Please choose team and user",
+  "firstInsertData": "Please first add teams, users and attributes",
+  "noAttributes": "No attributes",
+
+  "data": "Data",
+  "noData": "No data available",
+  "selectTeam": "Please select team",
+
+  "admin": "Admin",
+  "users": "Users",
+  "teams": "Teams",
+  "attributes": "Attributes",
+
+  "noTeams": "No teams",
+  "noUsers": "No users",
+
+  "name": "Name",
+  "cancel": "Cancel",
+  "ok": "OK",
+  "nameError": "Error: Name required",
+
+  "newAttribute": "Add new attribute",
+  "threshold": "Threshold",
+  "rangeStart": "Range start",
+  "rangeEnd": "Range end",
+  "rangeError": "Error: range start should be smaller than range end",
+
+  "newTeam": "Add new team",
+  "newUser": "Add new user",
+
+  "chooseUsers": "Choose users of team {team}"
+}

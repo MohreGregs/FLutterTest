@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertest/widgets/dialogs/addUserDialog.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../database/database.dart';
 import '../../database/entities/user.dart';
@@ -23,6 +24,7 @@ class UserTabState extends State<UserTab> {
 
   @override
   Widget build(BuildContext context) {
+    var locale = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -30,7 +32,7 @@ class UserTabState extends State<UserTab> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("Users", style: TextStyle(fontSize: 20)),
+              Text(locale!.users, style: const TextStyle(fontSize: 20)),
               IconButton(
                 color: Colors.orange,
                 onPressed: () {
@@ -50,7 +52,7 @@ class UserTabState extends State<UserTab> {
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Entry ${users![index].name}'),
+                                Text(users![index].name),
                                 IconButton(
                                     color: Colors.orange,
                                     onPressed: () {
@@ -65,8 +67,8 @@ class UserTabState extends State<UserTab> {
                       separatorBuilder: (BuildContext context, int index) =>
                           const Divider(),
                       itemCount: users!.length)
-                  : const Center(
-                      child: Text("No users"),
+                  : Center(
+                      child: Text(locale.noUsers),
                     ))
         ],
       ),

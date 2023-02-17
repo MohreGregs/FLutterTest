@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertest/classes/custom_icons_icons.dart';
 import 'package:fluttertest/database/database.dart';
 import 'package:fluttertest/database/entities/point.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../classes/argument.dart';
 import '../classes/diagramPainter.dart';
@@ -29,9 +30,10 @@ class DiagramState extends State<DiagramPage> {
 
   @override
   Widget build(BuildContext context) {
+    var locale = AppLocalizations.of(context);
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Data"),
+          title: Text(locale!.data),
         ),
         body: (teams != null &&
                 teams!.isNotEmpty &&
@@ -43,7 +45,7 @@ class DiagramState extends State<DiagramPage> {
                   children: [
                     DropdownButton(
                         isExpanded: true,
-                        hint: const Text("Choose team..."),
+                        hint: Text(locale.chooseTeam),
                         value: teamDropdownValue,
                         icon: const Icon(CustomIcons.arrow_drop_down),
                         items: teams?.map<DropdownMenuItem<Team>>((Team team) {
@@ -67,11 +69,11 @@ class DiagramState extends State<DiagramPage> {
                                         double.infinity, double.infinity),
                                     painter: DiagramPainter(args!)),
                               )
-                            : const Text("No data available")
-                        : const Text("Please select team")
+                            : Text(locale.noData)
+                        : Text(locale.selectTeam)
                   ],
                 ))
-            : const Text("Please first insert teams and attributes"));
+            : Center (child: Text(locale.firstInsertData)));
   }
 
   void getArgsOfTeam() {

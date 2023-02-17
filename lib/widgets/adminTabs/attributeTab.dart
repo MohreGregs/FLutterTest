@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertest/database/entities/attribute.dart';
 import 'package:fluttertest/widgets/dialogs/addAttributeDialog.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../database/database.dart';
 
@@ -24,6 +25,7 @@ class AttributeTabState extends State<AttributeTab>{
 
   @override
   Widget build(BuildContext context) {
+    var locale = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -31,7 +33,7 @@ class AttributeTabState extends State<AttributeTab>{
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("Attributes", style: TextStyle(fontSize: 20)),
+              Text(locale!.attributes, style: const TextStyle(fontSize: 20)),
               IconButton(
                 color:Colors.orange,
                 onPressed: (){
@@ -53,7 +55,7 @@ class AttributeTabState extends State<AttributeTab>{
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Entry ${attributes![index].name}'),
+                          Text(attributes![index].name),
                           IconButton(
                               color:Colors.orange,
                               onPressed: (){
@@ -70,7 +72,7 @@ class AttributeTabState extends State<AttributeTab>{
                 separatorBuilder: (BuildContext context, int index) => const Divider(),
                 itemCount: attributes!.length
             )
-                : const Center (child: Text("No attributes"),),
+                : Center (child: Text(locale.noAttributes),),
           )
         ],
       ),

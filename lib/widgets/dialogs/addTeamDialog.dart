@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../database/database.dart';
 import '../../database/entities/team.dart';
@@ -25,14 +26,15 @@ class AddTeamState extends State<AddTeamDialog>{
 
   @override
   Widget build(BuildContext context) {
+    var locale = AppLocalizations.of(context);
     return AlertDialog(
-      title: const Text("Add new Team"),
+      title:  Text(locale!.newTeam),
       content: Column(
         children: [
           Text(errorText, style: const TextStyle(color: Colors.redAccent),),
           TextField(
             controller: nameController,
-            decoration: const InputDecoration(hintText: "Name"),
+            decoration: InputDecoration(hintText: locale.name),
           ),
         ],
       ),
@@ -43,15 +45,15 @@ class AddTeamState extends State<AddTeamDialog>{
               Navigator.pop(context);
             });
           },
-          child: const Text("Cancel"),
+          child: Text(locale.cancel),
         ),
         TextButton(
-          child: const Text("OK"),
+          child: Text(locale.ok),
           onPressed: (){
             setState(() {
               if(nameController.text == ""){
                 setState(() {
-                  errorText = "Name required";
+                  errorText = locale.nameError;
                 });
               }else{
                 if(widget.team != null){

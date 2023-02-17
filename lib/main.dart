@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fluttertest/database/database.dart';
 import 'package:fluttertest/widgets/adminWidget.dart';
 import 'package:fluttertest/widgets/diagramWidget.dart';
@@ -17,10 +19,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      onGenerateTitle: (context){
+        return AppLocalizations.of(context)!.appTitle;
+      },
       theme: ThemeData(
         primarySwatch: Colors.orange,
       ),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        AppLocalizations.delegate
+      ],
+      supportedLocales: const [
+        Locale('en', ''),
+        Locale('de', '')
+      ],
       initialRoute: '/',
       routes: {
         '/': (context) => const InsertDataPage(),

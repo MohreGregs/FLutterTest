@@ -3,6 +3,7 @@ import 'package:fluttertest/database/database.dart';
 import 'package:fluttertest/database/entities/attribute.dart';
 import 'package:fluttertest/database/entities/point.dart';
 import 'package:fluttertest/widgets/sliderWithTextWidget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../classes/argument.dart';
 import '../classes/custom_icons_icons.dart';
@@ -31,9 +32,10 @@ class InsertDataPageState extends State<InsertDataPage> {
 
   @override
   Widget build(BuildContext context) {
+    var locale = AppLocalizations.of(context);
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Insert Data"),
+          title: Text(locale!.insertPoints),
           actions: [
             IconButton(
                 onPressed: () {
@@ -58,7 +60,7 @@ class InsertDataPageState extends State<InsertDataPage> {
                   children: <Widget>[
                     DropdownButton(
                         isExpanded: true,
-                        hint: const Text("Choose team..."),
+                        hint: Text(locale.chooseTeam),
                         value: teamDropdownValue,
                         icon: const Icon(CustomIcons.arrow_drop_down),
                         items: teams?.map<DropdownMenuItem<Team>>((Team team) {
@@ -74,27 +76,29 @@ class InsertDataPageState extends State<InsertDataPage> {
                           });
                           getTeamUsers(team.id);
                         }),
-                    (teamUsers != null && teamUsers!.isNotEmpty)
-                        ? DropdownButton(
-                            isExpanded: true,
-                            hint: const Text("Choose user..."),
-                            value: userDropdownValue,
-                            icon: const Icon(CustomIcons.arrow_drop_down),
-                            items: teamUsers
-                                ?.map<DropdownMenuItem<User>>((User user) {
-                              return DropdownMenuItem<User>(
-                                value: user,
-                                child: Text(user.name),
-                              );
-                            }).toList(),
-                            onChanged: (Object? value) {
-                              setState(() {
-                                userDropdownValue = value as User;
-                              });
-                            })
-                        : const Text("No users for this team.",
-                            style: TextStyle(color: Colors.redAccent)),
-                    getSliderWidgets(attributes),
+                    (teamUsers != null)
+                        ? (teamUsers!.isNotEmpty)
+                            ? DropdownButton(
+                                isExpanded: true,
+                                hint: Text(locale.chooseUser),
+                                value: userDropdownValue,
+                                icon: const Icon(CustomIcons.arrow_drop_down),
+                                items: teamUsers
+                                    ?.map<DropdownMenuItem<User>>((User user) {
+                                  return DropdownMenuItem<User>(
+                                    value: user,
+                                    child: Text(user.name),
+                                  );
+                                }).toList(),
+                                onChanged: (Object? value) {
+                                  setState(() {
+                                    userDropdownValue = value as User;
+                                  });
+                                })
+                            : Text(locale.noUsersForTeam,
+                                style: const TextStyle(color: Colors.redAccent))
+                        : const Text(""),
+                    getSliderWidgets(attributes, locale),
                     (userDropdownValue != null)
                         ? TextButton(
                             style: TextButton.styleFrom(
@@ -112,18 +116,17 @@ class InsertDataPageState extends State<InsertDataPage> {
                               });
                               fetchData();
                             },
-                            child: const Text('Send Data'),
+                            child: Text(locale.sendPoint),
                           )
-                        : const Center(
-                            child: Text("Please choose team and user")),
+                        : Center(child: Text(locale.chooseUserAndTeam)),
                   ],
                 ))
-            : const Center(
-                child: Text("Please first insert teams, users and attributes"),
+            : Center(
+                child: Text(locale.firstInsertData),
               ));
   }
 
-  Widget getSliderWidgets(List<Argument>? attributes) {
+  Widget getSliderWidgets(List<Argument>? attributes, AppLocalizations locale) {
     if (attributes != null) {
       if (attributes.isNotEmpty) {
         if (teamDropdownValue != null && userDropdownValue != null) {
@@ -144,7 +147,7 @@ class InsertDataPageState extends State<InsertDataPage> {
         return const Text("");
       }
     }
-    return const Center(child: Text("No Attributes"));
+    return Center(child: Text(locale.noAttributes));
   }
 
   List<Argument> getArguments(List<Attribute>? attributes) {

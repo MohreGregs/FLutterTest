@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertest/database/entities/teamUser.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../classes/userWithBool.dart';
 import '../../database/database.dart';
@@ -28,8 +29,9 @@ class AddUsersToTeamState extends State<AddUsersToTeamDialog>{
 
   @override
   Widget build(BuildContext context) {
+    var locale = AppLocalizations.of(context);
     return AlertDialog(
-      title: Text("Choose users of team ${widget.team.name}"),
+      title: Text(locale!.chooseUsers(widget.team)),
       content: (users.isNotEmpty) ?
           SizedBox(
             height: double.maxFinite,
@@ -42,7 +44,7 @@ class AddUsersToTeamState extends State<AddUsersToTeamDialog>{
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Entry ${users[index].user.name}'),
+                        Text(users[index].user.name),
                         Checkbox(value: users[index].value, onChanged: (value){
                           setState(() {
                             users[index].value = value!;
@@ -55,7 +57,7 @@ class AddUsersToTeamState extends State<AddUsersToTeamDialog>{
               itemCount: users.length,
             ),
           )
-          : const Center (child: Text("No users"),
+          : Center (child: Text(locale.noUsers),
       ),
       actions: <Widget>[
         TextButton(
@@ -64,10 +66,10 @@ class AddUsersToTeamState extends State<AddUsersToTeamDialog>{
               Navigator.pop(context);
             });
           },
-          child: const Text("Cancel"),
+          child: Text(locale.cancel),
         ),
         TextButton(
-          child: const Text("OK"),
+          child: Text(locale.ok),
           onPressed: (){
             for (var user in users) {
               if(user.value && !isUserInTeam(user.user.id)){
