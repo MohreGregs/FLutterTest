@@ -29,7 +29,7 @@ class AddTeamState extends State<AddTeamDialog>{
       title: const Text("Add new Team"),
       content: Column(
         children: [
-          Text(errorText),
+          Text(errorText, style: const TextStyle(color: Colors.redAccent),),
           TextField(
             controller: nameController,
             decoration: const InputDecoration(hintText: "Name"),
@@ -50,7 +50,9 @@ class AddTeamState extends State<AddTeamDialog>{
           onPressed: (){
             setState(() {
               if(nameController.text == ""){
-                errorText = "Name required";
+                setState(() {
+                  errorText = "Name required";
+                });
               }else{
                 if(widget.team != null){
                   AppDatabase.updateTeam(Team(widget.team!.id, nameController.text));

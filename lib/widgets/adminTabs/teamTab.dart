@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertest/classes/custom_icons_icons.dart';
 import 'package:fluttertest/widgets/dialogs/addUsersToTeamDialog.dart';
 
 import '../../database/database.dart';
@@ -55,21 +56,26 @@ class TeamTabState extends State<TeamTab>{
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text('Entry ${teams![index].name}'),
-                                  IconButton(
-                                      color:Colors.orange,
-                                      onPressed: (){
-                                        addUsersDialog(context, teams![index]);
-                                      },
-                                      icon: const Icon(Icons.add_reaction)
-                                  ),
-                                  IconButton(
-                                      color:Colors.orange,
-                                      onPressed: (){
-                                        displayAddTeamDialog(context, teams?[index]).then((value) => {
-                                          fetchData()
-                                        });
-                                      },
-                                      icon: const Icon(Icons.edit)
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      IconButton(
+                                          color:Colors.orange,
+                                          onPressed: (){
+                                            addUsersDialog(context, teams![index]);
+                                          },
+                                          icon: const Icon(CustomIcons.person_add)
+                                      ),
+                                      IconButton(
+                                          color:Colors.orange,
+                                          onPressed: (){
+                                            displayAddTeamDialog(context, teams?[index]).then((value) => {
+                                              fetchData()
+                                            });
+                                          },
+                                          icon: const Icon(Icons.edit)
+                                      )
+                                    ],
                                   )
                                 ]
                             ),

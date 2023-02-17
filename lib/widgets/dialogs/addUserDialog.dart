@@ -29,7 +29,7 @@ class AddUserState extends State<AddUserDialog> {
       title: const Text("Add new User"),
       content: Column(
         children: [
-          Text(errorText),
+          Text(errorText, style: const TextStyle(color: Colors.redAccent),),
           TextField(
             controller: nameController,
             decoration: const InputDecoration(hintText: "Name"),
@@ -50,7 +50,9 @@ class AddUserState extends State<AddUserDialog> {
           onPressed: () {
             setState(() {
               if (nameController.text == "") {
-                errorText = "Name required";
+                setState(() {
+                  errorText = "Name required";
+                });
               } else {
                 if (widget.user != null) {
                   AppDatabase.updateUser(

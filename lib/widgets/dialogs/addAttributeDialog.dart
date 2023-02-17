@@ -23,7 +23,7 @@ class AddAttributeState extends State<AddAttributeDialog>{
   @override
   void initState() {
     nameController.text = widget.attribute?.name ?? "";
-    thresholdController.text = widget.attribute?.threshold.toString() ?? "";
+    thresholdController.text = widget.attribute?.threshold.toString() ?? "0";
     rangeStartController.text = widget.attribute?.rangeStart.toString() ?? "";
     rangeEndController.text = widget.attribute?.rangeEnd.toString() ?? "";
 
@@ -36,7 +36,7 @@ class AddAttributeState extends State<AddAttributeDialog>{
         title: const Text("Add new Attribute"),
         content: Column(
           children: [
-            Text(errorText),
+            Text(errorText, style: const TextStyle(color: Colors.redAccent),),
             TextField(
               controller: nameController,
               decoration: const InputDecoration(hintText: "Name"),
@@ -72,8 +72,17 @@ class AddAttributeState extends State<AddAttributeDialog>{
             onPressed: (){
               setState(() {
                 if(int.parse(rangeStartController.text) >= int.parse(rangeEndController.text)){
-                  errorText = "range start should be smaller than range end";
+                  setState(() {
+                    errorText = "range start should be smaller than range end";
+                  });
+                }else if(nameController.text == ""){
+                  setState(() {
+                    errorText = "please insert name";
+                  });
                 }else{
+                  if(thresholdController.text == ""){
+                    thresholdController.text = "0";
+                  }
                   if(widget.attribute == null){
                     AppDatabase.insertAttribute(Attribute(-1, nameController.text, int.parse(thresholdController.text), int.parse(rangeStartController.text), int.parse(rangeEndController.text)));
                   }else{

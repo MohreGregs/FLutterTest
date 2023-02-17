@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertest/classes/custom_icons_icons.dart';
 import 'package:fluttertest/database/database.dart';
 import 'package:fluttertest/database/entities/point.dart';
 
@@ -32,36 +33,45 @@ class DiagramState extends State<DiagramPage> {
         appBar: AppBar(
           title: const Text("Data"),
         ),
-        body: Column(
-          children: [
-            DropdownButton(
-                hint: const Text("Choose team..."),
-                value: teamDropdownValue,
-                icon: const Icon(Icons.account_circle_rounded),
-                items: teams?.map<DropdownMenuItem<Team>>((Team team) {
-                  return DropdownMenuItem<Team>(
-                    value: team,
-                    child: Text(team.name),
-                  );
-                }).toList(),
-                onChanged: (Object? value) {
-                  var team = value as Team;
-                  setState(() {
-                    teamDropdownValue = team;
-                  });
-                  getArgsOfTeam();
-                }),
-            (teamDropdownValue != null)
-                ? (args != null && args!.isNotEmpty)
-                    ? Expanded(
-                        child: CustomPaint(
-                            size: const Size(double.infinity, double.infinity),
-                            painter: DiagramPainter(args!)),
-                      )
-                    : const Text("No data available")
-                : const Text("Please select team")
-          ],
-        ));
+        body: (teams != null &&
+                teams!.isNotEmpty &&
+                attributes != null &&
+                attributes!.isNotEmpty)
+            ? Padding(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    DropdownButton(
+                        isExpanded: true,
+                        hint: const Text("Choose team..."),
+                        value: teamDropdownValue,
+                        icon: const Icon(CustomIcons.arrow_drop_down),
+                        items: teams?.map<DropdownMenuItem<Team>>((Team team) {
+                          return DropdownMenuItem<Team>(
+                            value: team,
+                            child: Text(team.name),
+                          );
+                        }).toList(),
+                        onChanged: (Object? value) {
+                          var team = value as Team;
+                          setState(() {
+                            teamDropdownValue = team;
+                          });
+                          getArgsOfTeam();
+                        }),
+                    (teamDropdownValue != null)
+                        ? (args != null && args!.isNotEmpty)
+                            ? Expanded(
+                                child: CustomPaint(
+                                    size: const Size(
+                                        double.infinity, double.infinity),
+                                    painter: DiagramPainter(args!)),
+                              )
+                            : const Text("No data available")
+                        : const Text("Please select team")
+                  ],
+                ))
+            : const Text("Please first insert teams and attributes"));
   }
 
   void getArgsOfTeam() {
@@ -97,16 +107,16 @@ class DiagramState extends State<DiagramPage> {
     return args;
   }
 
-  void fetchData() async{
+  void fetchData() async {
     AppDatabase.getTeams().whenComplete(() => {
-      setState(() {
-        teams = AppDatabase.teams;
-      })
-    });
+          setState(() {
+            teams = AppDatabase.teams;
+          })
+        });
     AppDatabase.getAttributes().whenComplete(() => {
-      setState(() {
-        attributes = AppDatabase.attributes;
-      })
-    });
+          setState(() {
+            attributes = AppDatabase.attributes;
+          })
+        });
   }
 }

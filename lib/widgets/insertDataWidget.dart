@@ -5,6 +5,7 @@ import 'package:fluttertest/database/entities/point.dart';
 import 'package:fluttertest/widgets/sliderWithTextWidget.dart';
 
 import '../classes/argument.dart';
+import '../classes/custom_icons_icons.dart';
 import '../database/entities/team.dart';
 import '../database/entities/user.dart';
 
@@ -41,64 +42,82 @@ class InsertDataPageState extends State<InsertDataPage> {
                 icon: const Icon(Icons.bar_chart)),
             IconButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/admin').then((value) => {
-                    fetchData()
-                  });
+                  Navigator.pushNamed(context, '/admin')
+                      .then((value) => {fetchData()});
                 },
                 icon: const Icon(Icons.accessible_forward_rounded))
           ],
         ),
-        body: (teams != null && attributes != null)
-            ? Column(
-                children: <Widget>[
-                  DropdownButton(
-                      hint: const Text("Choose team..."),
-                      value: teamDropdownValue,
-                      icon: const Icon(Icons.account_circle_rounded),
-                      items: teams?.map<DropdownMenuItem<Team>>((Team team) {
-                        return DropdownMenuItem<Team>(
-                          value: team,
-                          child: Text(team.name),
-                        );
-                      }).toList(),
-                      onChanged: (Object? value) {
-                        var team = value as Team;
-                        setState(() {
-                          teamDropdownValue = team;
-                        });
-                        getTeamUsers(team.id);
-                      }),
-                  DropdownButton(
-                      hint: const Text("Choose user..."),
-                      value: userDropdownValue,
-                      icon: const Icon(Icons.account_circle_rounded),
-                      items:
-                          teamUsers?.map<DropdownMenuItem<User>>((User user) {
-                        return DropdownMenuItem<User>(
-                          value: user,
-                          child: Text(user.name),
-                        );
-                      }).toList(),
-                      onChanged: (Object? value) {
-                        setState(() {
-                          userDropdownValue = value as User;
-                        });
-                      }),
-                  getSliderWidgets(attributes),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      textStyle: const TextStyle(fontSize: 20),
-                    ),
-                    onPressed: () {
-                      attributes?.forEach((element) {
-                        AppDatabase.insertPoint(Point(-1, element.value, DateTime.now(), element.id, teamDropdownValue!.id, userDropdownValue!.id));
-                      });
-                      fetchData();
-                    },
-                    child: const Text('Send Data'),
-                  ),
-                ],
-              )
+        body: (teams != null &&
+                teams!.isNotEmpty &&
+                attributes != null &&
+                attributes!.isNotEmpty)
+            ? Padding(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  children: <Widget>[
+                    DropdownButton(
+                        isExpanded: true,
+                        hint: const Text("Choose team..."),
+                        value: teamDropdownValue,
+                        icon: const Icon(CustomIcons.arrow_drop_down),
+                        items: teams?.map<DropdownMenuItem<Team>>((Team team) {
+                          return DropdownMenuItem<Team>(
+                            value: team,
+                            child: Text(team.name),
+                          );
+                        }).toList(),
+                        onChanged: (Object? value) {
+                          var team = value as Team;
+                          setState(() {
+                            teamDropdownValue = team;
+                          });
+                          getTeamUsers(team.id);
+                        }),
+                    (teamUsers != null && teamUsers!.isNotEmpty)
+                        ? DropdownButton(
+                            isExpanded: true,
+                            hint: const Text("Choose user..."),
+                            value: userDropdownValue,
+                            icon: const Icon(CustomIcons.arrow_drop_down),
+                            items: teamUsers
+                                ?.map<DropdownMenuItem<User>>((User user) {
+                              return DropdownMenuItem<User>(
+                                value: user,
+                                child: Text(user.name),
+                              );
+                            }).toList(),
+                            onChanged: (Object? value) {
+                              setState(() {
+                                userDropdownValue = value as User;
+                              });
+                            })
+                        : const Text("No users for this team.",
+                            style: TextStyle(color: Colors.redAccent)),
+                    getSliderWidgets(attributes),
+                    (userDropdownValue != null)
+                        ? TextButton(
+                            style: TextButton.styleFrom(
+                              textStyle: const TextStyle(fontSize: 20),
+                            ),
+                            onPressed: () {
+                              attributes?.forEach((element) {
+                                AppDatabase.insertPoint(Point(
+                                    -1,
+                                    element.value,
+                                    DateTime.now(),
+                                    element.id,
+                                    teamDropdownValue!.id,
+                                    userDropdownValue!.id));
+                              });
+                              fetchData();
+                            },
+                            child: const Text('Send Data'),
+                          )
+                        : const Center(
+                            child: Text("Please choose team and user")),
+                  ],
+                ))
             : const Center(
                 child: Text("Please first insert teams, users and attributes"),
               ));
@@ -107,22 +126,22 @@ class InsertDataPageState extends State<InsertDataPage> {
   Widget getSliderWidgets(List<Argument>? attributes) {
     if (attributes != null) {
       if (attributes.isNotEmpty) {
-        if(teamDropdownValue != null && userDropdownValue != null){
+        if (teamDropdownValue != null && userDropdownValue != null) {
           return Column(
             children: attributes
                 .map((arg) => SliderWithText(
-              text: arg.name,
-              onSliderChanged: (value) {
-                arg.value = value;
-              },
-              currentState: arg.value,
-              rangeStart: arg.rangeStart,
-              rangeEnd: arg.rangeEnd,
-            ))
+                      text: arg.name,
+                      onSliderChanged: (value) {
+                        arg.value = value;
+                      },
+                      currentState: arg.value,
+                      rangeStart: arg.rangeStart,
+                      rangeEnd: arg.rangeEnd,
+                    ))
                 .toList(),
           );
         }
-        return const Center(child: Text("Please choose team and user"));
+        return const Text("");
       }
     }
     return const Center(child: Text("No Attributes"));
@@ -149,19 +168,19 @@ class InsertDataPageState extends State<InsertDataPage> {
         });
   }
 
-  void fetchData() async{
+  void fetchData() async {
     teamDropdownValue = null;
     userDropdownValue = null;
     teamUsers = null;
     AppDatabase.getAttributes().whenComplete(() => {
-      setState(() {
-        attributes = getArguments(AppDatabase.attributes);
-      })
-    });
+          setState(() {
+            attributes = getArguments(AppDatabase.attributes);
+          })
+        });
     AppDatabase.getTeams().whenComplete(() => {
-      setState(() {
-        teams = AppDatabase.teams;
-      })
-    });
+          setState(() {
+            teams = AppDatabase.teams;
+          })
+        });
   }
 }
