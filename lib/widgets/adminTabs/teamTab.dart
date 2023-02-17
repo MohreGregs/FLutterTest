@@ -1,12 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertest/classes/userWithBool.dart';
-import 'package:fluttertest/database/entities/teamUser.dart';
 import 'package:fluttertest/widgets/dialogs/addUsersToTeamDialog.dart';
 
 import '../../database/database.dart';
 import '../../database/entities/team.dart';
-import '../../database/entities/user.dart';
 import '../dialogs/addTeamDialog.dart';
 
 class TeamTab extends StatefulWidget{
@@ -22,12 +19,8 @@ class TeamTabState extends State<TeamTab>{
 
   @override
   void initState() {
-    AppDatabase.getTeams().whenComplete(() => {
-      setState((){
-        teams = AppDatabase.teams;
-      })
-    });
     super.initState();
+    fetchData();
   }
 
   @override
@@ -44,7 +37,7 @@ class TeamTabState extends State<TeamTab>{
                   color:Colors.orange,
                   onPressed: (){
                     displayAddTeamDialog(context).then((value) => {
-                      initState()
+                      fetchData()
                     });
                   },
                   icon: const Icon(Icons.add),
@@ -73,7 +66,7 @@ class TeamTabState extends State<TeamTab>{
                                       color:Colors.orange,
                                       onPressed: (){
                                         displayAddTeamDialog(context, teams?[index]).then((value) => {
-                                          initState()
+                                          fetchData()
                                         });
                                       },
                                       icon: const Icon(Icons.edit)
@@ -108,5 +101,13 @@ class TeamTabState extends State<TeamTab>{
           return AddUsersToTeamDialog(team: team);
         }
     );
+  }
+
+  void fetchData() async{
+    AppDatabase.getTeams().whenComplete(() => {
+      setState((){
+        teams = AppDatabase.teams;
+      })
+    });
   }
 }

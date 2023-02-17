@@ -22,10 +22,8 @@ class AddUsersToTeamState extends State<AddUsersToTeamDialog>{
 
   @override
   void initState() {
-    AppDatabase.getTeamUsers(widget.team.id).whenComplete(() => {
-      getUsers()
-    });
     super.initState();
+    fetchData();
   }
 
   @override
@@ -108,5 +106,11 @@ class AddUsersToTeamState extends State<AddUsersToTeamDialog>{
       if(element.id == userId) return true;
     }
     return false;
+  }
+
+  void fetchData(){
+    AppDatabase.getTeamUsers(widget.team.id).whenComplete(() => {
+      getUsers()
+    });
   }
 }

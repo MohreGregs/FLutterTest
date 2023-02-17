@@ -17,12 +17,8 @@ class UserTabState extends State<UserTab> {
 
   @override
   void initState() {
-    AppDatabase.getUsers().whenComplete(() => {
-      setState(() {
-        users = AppDatabase.users;
-      })
-    });
     super.initState();
+    fetchData();
   }
 
   @override
@@ -38,9 +34,7 @@ class UserTabState extends State<UserTab> {
               IconButton(
                 color: Colors.orange,
                 onPressed: () {
-                  displayAddUserDialog(context).then((value) => {
-                    initState()
-                  });
+                  displayAddUserDialog(context).then((value) => {fetchData()});
                 },
                 icon: const Icon(Icons.add),
               ),
@@ -60,8 +54,9 @@ class UserTabState extends State<UserTab> {
                                 IconButton(
                                     color: Colors.orange,
                                     onPressed: () {
-                                      displayAddUserDialog(
-                                          context, users?[index]);
+                                      displayAddUserDialog(context, users?[index]).then((value) => {
+                                        fetchData()
+                                      });
                                     },
                                     icon: const Icon(Icons.edit))
                               ]),
@@ -85,6 +80,14 @@ class UserTabState extends State<UserTab> {
           return AddUserDialog(
             user: user,
           );
+        });
+  }
+
+  void fetchData() async {
+    AppDatabase.getUsers().whenComplete(() => {
+          setState(() {
+            users = AppDatabase.users;
+          })
         });
   }
 }

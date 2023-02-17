@@ -11,8 +11,8 @@ class Point{
   Map<String, dynamic> toMap(){
     return {
       'value': value,
-      'creationTime': creationTime,
-      'pointId': attributeId,
+      'creationTime': creationTime.toString(),
+      'attributeId': attributeId,
       'teamId': teamId,
       'userId': userId
     };

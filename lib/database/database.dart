@@ -26,7 +26,7 @@ class AppDatabase {
   static const String teamUserSQL =
       'CREATE TABLE teamUser(id INTEGER PRIMARY KEY AUTOINCREMENT, teamId INTEGER REFERENCES teams(id), userId INTEGER REFERENCES users(id));';
   static const String pointSQL =
-      'CREATE TABLE points(id INTEGER PRIMARY KEY AUTOINCREMENT, value DOUBLE, creationTime DATE, attributeId INTEGER REFERENCES attributes(id), teamId INTEGER REFERENCES teams(id), userID INTEGER REFERENCES users(id));';
+      'CREATE TABLE points(id INTEGER PRIMARY KEY AUTOINCREMENT, value DOUBLE, creationTime DATE, attributeId INTEGER REFERENCES attributes(id), teamId INTEGER REFERENCES teams(id), userId INTEGER REFERENCES users(id));';
 
   static openAppDatabase() async {
     database = await openDatabase(
@@ -173,7 +173,7 @@ class AppDatabase {
       return Point(
         maps[index]['id'] as int,
         maps[index]['value'] as double,
-        maps[index]['creationTime'] as DateTime,
+        DateTime.parse(maps[index]['creationTime'] as String),
         maps[index]['attributeId'] as int,
         maps[index]['teamId'] as int,
         maps[index]['userId'] as int

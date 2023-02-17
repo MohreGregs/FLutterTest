@@ -18,12 +18,8 @@ class AttributeTabState extends State<AttributeTab>{
 
   @override
   void initState() {
-    AppDatabase.getAttributes().whenComplete(() => {
-      setState((){
-        attributes = AppDatabase.attributes;
-      })
-    });
     super.initState();
+    fetchData();
   }
 
   @override
@@ -40,7 +36,7 @@ class AttributeTabState extends State<AttributeTab>{
                 color:Colors.orange,
                 onPressed: (){
                   displayAddAttributeDialog(context).then((value) => {
-                    initState()
+                    fetchData()
                   });
                 },
                 icon: const Icon(Icons.add),
@@ -61,7 +57,9 @@ class AttributeTabState extends State<AttributeTab>{
                           IconButton(
                               color:Colors.orange,
                               onPressed: (){
-                                displayAddAttributeDialog(context, attributes?[index]);
+                                displayAddAttributeDialog(context, attributes?[index]).then((value) => {
+                                  fetchData()
+                                });
                               },
                               icon: const Icon(Icons.edit)
                           )
@@ -86,5 +84,13 @@ class AttributeTabState extends State<AttributeTab>{
           return AddAttributeDialog(attribute: attribute,);
         }
     );
+  }
+
+  void fetchData() async{
+    AppDatabase.getAttributes().whenComplete(() => {
+      setState((){
+        attributes = AppDatabase.attributes;
+      })
+    });
   }
 }

@@ -24,21 +24,8 @@ class InsertDataPageState extends State<InsertDataPage> {
 
   @override
   void initState() {
-    teamDropdownValue = null;
-    userDropdownValue = null;
-    teamUsers = null;
-    AppDatabase.getAttributes().whenComplete(() => {
-          setState(() {
-            attributes = getArguments(AppDatabase.attributes);
-          })
-        });
-    AppDatabase.getTeams().whenComplete(() => {
-          setState(() {
-            teams = AppDatabase.teams;
-          })
-        });
-
     super.initState();
+    fetchData();
   }
 
   @override
@@ -55,7 +42,7 @@ class InsertDataPageState extends State<InsertDataPage> {
             IconButton(
                 onPressed: () {
                   Navigator.pushNamed(context, '/admin').then((value) => {
-                    initState()
+                    fetchData()
                   });
                 },
                 icon: const Icon(Icons.accessible_forward_rounded))
@@ -106,7 +93,7 @@ class InsertDataPageState extends State<InsertDataPage> {
                       attributes?.forEach((element) {
                         AppDatabase.insertPoint(Point(-1, element.value, DateTime.now(), element.id, teamDropdownValue!.id, userDropdownValue!.id));
                       });
-                      initState();
+                      fetchData();
                     },
                     child: const Text('Send Data'),
                   ),
@@ -160,5 +147,21 @@ class InsertDataPageState extends State<InsertDataPage> {
             teamUsers = AppDatabase.teamUsers;
           })
         });
+  }
+
+  void fetchData() async{
+    teamDropdownValue = null;
+    userDropdownValue = null;
+    teamUsers = null;
+    AppDatabase.getAttributes().whenComplete(() => {
+      setState(() {
+        attributes = getArguments(AppDatabase.attributes);
+      })
+    });
+    AppDatabase.getTeams().whenComplete(() => {
+      setState(() {
+        teams = AppDatabase.teams;
+      })
+    });
   }
 }
