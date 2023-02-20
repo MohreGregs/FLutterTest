@@ -12,6 +12,7 @@
   "data": "Daten",
   "noData": "Keine Daten vorhanden",
   "selectTeam": "Bitte Team wählen",
+  "moreData": "Mehr als drei Eigenschaften benötigt",
 
   "admin": "Admin",
   "users": "Nutzer",

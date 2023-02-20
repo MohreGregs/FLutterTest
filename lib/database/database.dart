@@ -185,4 +185,27 @@ class AppDatabase {
     if(id == null) return;
     await database?.delete(table, where: 'id = ?', whereArgs: [id]);
   }
+
+  static Future<void> deleteUser(int? id) async{
+    if(id == null) return;
+
+    await database?.delete("teamUser", where: "userId = ?", whereArgs: [id]);
+    await database?.delete("points", where: "userId = ?", whereArgs: [id]);
+    await database?.delete("users", where: "id = ?", whereArgs: [id]);
+  }
+
+  static Future<void> deleteTeam(int? id) async{
+    if(id == null) return;
+
+    await database?.delete("teamUser", where: "teamId = ?", whereArgs: [id]);
+    await database?.delete("points", where: "teamId = ?", whereArgs: [id]);
+    await database?.delete("teams", where: "id = ?", whereArgs: [id]);
+  }
+
+  static Future<void> deleteAttribute(int? id) async{
+    if(id == null) return;
+
+    await database?.delete("points", where: "attributeId = ?", whereArgs: [id]);
+    await database?.delete("attributes", where: "id = ?", whereArgs: [id]);
+  }
 }

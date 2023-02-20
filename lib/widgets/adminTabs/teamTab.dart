@@ -35,7 +35,7 @@ class TeamTabState extends State<TeamTab>{
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(locale!.teams, style: TextStyle(fontSize: 20)),
+                Text(locale!.teams, style: const TextStyle(fontSize: 20)),
                 IconButton(
                   color:Colors.orange,
                   onPressed: (){
@@ -76,6 +76,15 @@ class TeamTabState extends State<TeamTab>{
                                             });
                                           },
                                           icon: const Icon(Icons.edit)
+                                      ),
+                                      IconButton(
+                                          color:Colors.orange,
+                                          onPressed: (){
+                                            AppDatabase.deleteTeam(teams![index].id).then((value) => {
+                                              fetchData()
+                                            });
+                                          },
+                                          icon: const Icon(Icons.delete)
                                       )
                                     ],
                                   )

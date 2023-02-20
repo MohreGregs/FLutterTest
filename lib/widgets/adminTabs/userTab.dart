@@ -53,14 +53,29 @@ class UserTabState extends State<UserTab> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(users![index].name),
-                                IconButton(
-                                    color: Colors.orange,
-                                    onPressed: () {
-                                      displayAddUserDialog(context, users?[index]).then((value) => {
-                                        fetchData()
-                                      });
-                                    },
-                                    icon: const Icon(Icons.edit))
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    IconButton(
+                                        color:Colors.orange,
+                                        onPressed: (){
+                                          displayAddUserDialog(context, users![index]).then((value) => {
+                                            fetchData()
+                                          });
+                                        },
+                                        icon: const Icon(Icons.edit)
+                                    ),
+                                    IconButton(
+                                        color:Colors.orange,
+                                        onPressed: (){
+                                          AppDatabase.deleteUser(users![index].id).then((value) => {
+                                            fetchData()
+                                          });
+                                        },
+                                        icon: const Icon(Icons.delete)
+                                    )
+                                  ],
+                                )
                               ]),
                         );
                       },

@@ -62,18 +62,20 @@ class DiagramState extends State<DiagramPage> {
                           getArgsOfTeam();
                         }),
                     (teamDropdownValue != null)
-                        ? (args != null && args!.isNotEmpty)
-                            ? Expanded(
-                                child: CustomPaint(
-                                    size: const Size(
-                                        double.infinity, double.infinity),
-                                    painter: DiagramPainter(args!)),
-                              )
+                        ? (args != null)
+                            ? (args!.length >= 3)
+                                ? Expanded(
+                                    child: CustomPaint(
+                                        size: const Size(
+                                            double.infinity, double.infinity),
+                                        painter: DiagramPainter(args!)),
+                                  )
+                                : Text(locale.moreData)
                             : Text(locale.noData)
                         : Text(locale.selectTeam)
                   ],
                 ))
-            : Center (child: Text(locale.firstInsertData)));
+            : Center(child: Text(locale.firstInsertData)));
   }
 
   void getArgsOfTeam() {
@@ -95,7 +97,7 @@ class DiagramState extends State<DiagramPage> {
           attributePoints.add(point.value);
         }
       });
-      if (attributePoints.length > arg.threshold) {
+      if (attributePoints.length >= arg.threshold) {
         var sum = 0.0;
         for (var element in attributePoints) {
           sum += element;

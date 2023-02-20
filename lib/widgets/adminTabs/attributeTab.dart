@@ -56,14 +56,28 @@ class AttributeTabState extends State<AttributeTab>{
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(attributes![index].name),
-                          IconButton(
-                              color:Colors.orange,
-                              onPressed: (){
-                                displayAddAttributeDialog(context, attributes?[index]).then((value) => {
-                                  fetchData()
-                                });
-                              },
-                              icon: const Icon(Icons.edit)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                  color:Colors.orange,
+                                  onPressed: (){
+                                    displayAddAttributeDialog(context, attributes![index]).then((value) => {
+                                      fetchData()
+                                    });
+                                  },
+                                  icon: const Icon(Icons.edit)
+                              ),
+                              IconButton(
+                                  color:Colors.orange,
+                                  onPressed: (){
+                                    AppDatabase.deleteAttribute(attributes![index].id).then((value) => {
+                                      fetchData()
+                                    });
+                                  },
+                                  icon: const Icon(Icons.delete)
+                              )
+                            ],
                           )
                         ]
                     ),

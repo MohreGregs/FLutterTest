@@ -12,6 +12,7 @@
   "data": "Data",
   "noData": "No data available",
   "selectTeam": "Please select team",
+  "moreData": "At least three attributes needed",
 
   "admin": "Admin",
   "users": "Users",
@@ -35,5 +36,10 @@
   "newTeam": "Add new team",
   "newUser": "Add new user",
 
-  "chooseUsers": "Choose users of team {team}"
+  "chooseUsers": "Choose users of team {team}",
+  "@chooseUsers": {
+    "placeholders": {
+      "team": {}
+    }
+  }
 }
